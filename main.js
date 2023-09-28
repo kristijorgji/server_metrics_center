@@ -140,7 +140,7 @@ function processFile(path) {
                         }
                         temp[formedIndex].used = dataMatch[2];
                         temp[formedIndex].free = dataMatch[3];
-                        temp[formedIndex].available = dataMatch[6];                    
+                        temp[formedIndex].available = dataMatch[6];
 
                         queued.push(temp[formedIndex]);
                         if (queued.length === BATCH_SIZE) {
@@ -189,6 +189,12 @@ function processFile(path) {
 
         function insertBatch(batch) {
             logger.trace('insertBatch');
+
+            if (batch.length === 0) {
+                logger.trace('The provided batch is empty so nothing to insert')
+                return Promise.resolve();
+            }
+
             return new Promise(function(resolve, reject) {
                 const sql = `INSERT INTO metrics (date, used_memory, free_memory, available_memory) VALUES ${batch.map(row =>  `('${row.date}', ${row.used}, ${row.free}, ${row.available})`).join(',')}`;
                 const recordsToBeInserted = batch.length;
