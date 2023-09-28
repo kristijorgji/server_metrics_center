@@ -196,7 +196,7 @@ function processFile(path) {
             }
 
             return new Promise(function(resolve, reject) {
-                const sql = `INSERT INTO metrics (date, used_memory, free_memory, available_memory) VALUES ${batch.map(row =>  `('${row.date}', ${row.used}, ${row.free}, ${row.available})`).join(',')}`;
+                const sql = `REPLACE INTO metrics (date, used_memory, free_memory, available_memory) VALUES ${batch.map(row =>  `('${row.date}', ${row.used}, ${row.free}, ${row.available})`).join(',')}`;
                 const recordsToBeInserted = batch.length;
                 con.query(sql, function (err, result) {
                     if (err) {
